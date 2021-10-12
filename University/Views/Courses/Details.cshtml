@@ -23,10 +23,37 @@ else
   }
   </ul>
 }
+@if(ViewBag.NoDepartments)
+{
+  <p>This course is not yet designated to a department</p>
+}
+else
+{
+  <br>
+  <p>This course is part of the following departments</p>
+  @foreach (var join in Model.DepartmentJoinEntities)
+  {
+  <p>@join.Department.Name</p>
+    @using (Html.BeginForm("DeleteDepartment", "Courses"))
+    {
+      @Html.Hidden("joinId", @join.CourseDepartmentId)
+      <input type="submit" value="Drop Department from Course"/>
+    }
+  }
+  @using (Html.BeginForm("AddDepartment", "Courses"))
+  {
+    @Html.HiddenFor(model => model.CourseId)
+
+    @Html.Label("Add Department ")
+    @Html.DropDownList("DepartmentId")
+
+    <input type="submit" value="Declare Department"/>
+  }
+}
 
 <p>@Html.ActionLink("Back to courses", "Index")</p>
 <p>@Html.ActionLink("Back to students", "Index")</p>
 <p>@Html.ActionLink("Add a new student", "Create", "Students")</p>
-<p>@Html.ActionLink("Edit this course", "Edit")</p>
-<p>@Html.ActionLink("Delete this course", "Delete")</p>
+<p>@Html.ActionLink("Edit this course", "Edit", new {id = Model.CourseId})</p>
+<p>@Html.ActionLink("Delete this course", "Delete", new {id = Model.CourseId})</p>
 <p>@Html.ActionLink("Home", "Index", "Home")</p>

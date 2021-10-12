@@ -1,0 +1,23 @@
+@{
+  Layout = "_Layout";
+}
+
+@using University.Models
+
+<h1>Department List</h1>
+
+@if (Model.Count == 0)
+{
+  <p>There are no departments registered</p>
+}
+
+<ul>
+  @foreach (Department department in Model)
+  {
+    <li>@Html.ActionLink($"{department.Name}", "Details", new {id = department.DepartmentId})</li>
+  }
+</ul>
+
+
+<p>@Html.ActionLink("Register new Department", "Create")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>

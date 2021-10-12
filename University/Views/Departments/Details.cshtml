@@ -1,0 +1,54 @@
+
+@{
+  Layout = "_Layout";
+}
+
+@model University.Models.Department;
+
+<h2>Department Details</h2>
+
+<h3>@Model.Name</h3>
+
+@if (@Model.StudentJoinEntities.Count == 0)
+{
+  <p>There are no students currently in this department</p>
+}
+else
+{
+  <h3>This department has the following students enrolled:</h3>
+  <ul>
+    @foreach(var join in Model.StudentJoinEntities)
+    {
+      <li>@join.Student.Name</li>
+      @using (Html.BeginForm("DeleteStudent", "Departments"))
+      {
+        @Html.Hidden("joinId", @join.DepartmentStudentId)
+        <input type="submit" value="Drop Student from Department"/>
+      }
+    }
+  </ul>
+}
+@if (@Model.CourseJoinEntities.Count == 0)
+{
+  <p>there are no courses currently in this department</p>
+}
+else
+{
+  <h3>this department has the following courses:</h3>
+  <ul>
+    @foreach(var join in Model.CourseJoinEntities)
+    {
+      <li>@join.Course.Name</li>
+      @using (Html.BeginForm("DeleteCourse", "Departments"))
+      {
+      @Html.Hidden("joinId", @join.CourseDepartmentId)
+      <input type="submit" value="Drop Course from Department"/>
+      }
+    }
+  </ul>
+}
+
+<p>@Html.ActionLink("See all Departments", "Index")</p>
+<p>@Html.ActionLink("Edit this Department", "Edit", new { id = Model.DepartmentId })</p>
+<p>@Html.ActionLink("Delete this Department", "Delete", new { id = Model.DepartmentId })</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>

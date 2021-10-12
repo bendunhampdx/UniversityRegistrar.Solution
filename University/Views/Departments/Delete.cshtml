@@ -1,0 +1,16 @@
+
+   
+@{
+  Layout = "_Layout";
+}
+
+@model University.Models.Department
+
+<h2>Would you like to delete @Model.Name?
+
+@using(Html.BeginForm())
+{
+  <input type="submit" value="Confirm"/>
+}
+
+@Html.ActionLink("Back to List", "Index")

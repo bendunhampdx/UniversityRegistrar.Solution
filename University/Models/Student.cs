@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 namespace University.Models
 {
@@ -11,8 +12,9 @@ namespace University.Models
 
         public int StudentId { get; set; }
         public string Name { get; set; }
-        public string DateOfEnrollment { get; set; }
+        public DateTime DateOfEnrollment { get; set; }
 
         public virtual ICollection<CourseStudent> JoinEntities { get;}
+         public virtual ICollection <DepartmentStudent> DepartmentJoinEntities {get;set;}
     }
 }

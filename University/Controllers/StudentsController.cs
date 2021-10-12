@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using University.Models;
 using System.Collections.Generic;
 using System.Linq;
-
+using Microsoft.AspNetCore.Mvc.Rendering;
 namespace University.Controllers
 {
   public class StudentsController : Controller
@@ -43,9 +43,15 @@ namespace University.Controllers
 
     public ActionResult Details(int id)
     {
+      ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "Name");
+      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "Name");
+      ViewBag.NoCourses = _db.Courses.ToList().Count == 0;
+      ViewBag.NoDepartments = _db.Departments.ToList().Count == 0;
         var thisStudent = _db.Students
             .Include(student => student.JoinEntities)
             .ThenInclude(join => join.Course)
+            .Include(student => student.DepartmentJoinEntities)
+            .ThenInclude(join => join.Department)
             .FirstOrDefault(student => student.StudentId == id);
         return View(thisStudent);
     }
@@ -110,5 +116,25 @@ namespace University.Controllers
         _db.SaveChanges();
         return RedirectToAction("Index");
     }
+        [HttpPost]
+    public ActionResult AddDepartment(Student student, int DepartmentId)
+    {
+      if (DepartmentId != 0)
+      {
+        _db.DepartmentStudent.Add(new DepartmentStudent() {StudentId = student.StudentId, DepartmentId = DepartmentId});
+      }
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public ActionResult DeleteDepartment(int joinId)
+    {
+      var joinEntry = _db.DepartmentStudent.FirstOrDefault(entry => entry.DepartmentStudentId == joinId);
+      _db.DepartmentStudent.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+    
   }
 }

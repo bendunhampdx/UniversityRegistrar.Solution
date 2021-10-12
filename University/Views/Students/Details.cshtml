@@ -32,6 +32,48 @@ else
     }
   }
 </ul>
+@if(Model.DepartmentJoinEntities.Count == 0)
+{
+  <p>This student has not yet declared a major</p>
+}
+else
+{
+    <h3>This student has the following majors:</h3>
+  <ul>
+  @foreach(var join in Model.DepartmentJoinEntities)
+  {
+    <li>@join.Department.Name
+    <div class="form-div">
+      @using (Html.BeginForm("DeleteDepartment", "Students"))
+      {
+        @Html.Hidden("joinId", @join.DepartmentStudentId)
+        <input type="submit" value="Drop Major from Student"/>
+      }
+    </div></li>
+  }
+  </ul>
+}
+
+@if(Model.DepartmentJoinEntities.Count < 2)
+{
+  <h4>Declare a major:</h4>
+  @using (Html.BeginForm("AddDepartment", "Students"))
+  {
+    @Html.HiddenFor(model => model.StudentId)
+
+    @Html.Label("Add a major ")
+    @Html.DropDownList("DepartmentId")
+
+    <input type="submit" value="Declare Major"/>
+  }
+}
+else
+{
+  <p>This student already has a joint major. Delete a current major to be able to add another. Email your advisor for more information.</p>
+}
+
+
+
 <p>@Html.ActionLink("Add a Course", "AddCourse", new { id = Model.StudentId })</p>
 <p>@Html.ActionLink("Back to list", "Index")</p>
 <p>@Html.ActionLink("Edit Student", "Edit", new { id = Model.StudentId })</p>

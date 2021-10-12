@@ -12,7 +12,7 @@
   <p>@Html.TextBoxFor(model => model.Name)</p>
 
   <p>@Html.LabelFor(model => model.DateOfEnrollment)</p>
-  <p>@Html.TextBoxFor(model => model.DateOfEnrollment)</p>
+  <p>@Html.TextBoxFor(model => model.DateOfEnrollment, new{@type="date"})</p>
 
   <p>@Html.Label("Select course")</p>
   <p>@Html.DropDownList("CourseId")</p>
